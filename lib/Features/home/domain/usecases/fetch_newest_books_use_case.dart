@@ -1,14 +1,16 @@
 import 'package:clean_arch_bookly_app/Core/error/failures.dart';
+import 'package:clean_arch_bookly_app/Core/use_cases/no_parameter_use_case.dart';
 import 'package:clean_arch_bookly_app/Features/home/domain/entities/book_entity.dart';
 import 'package:clean_arch_bookly_app/Features/home/domain/repositories/home_repo.dart';
 import 'package:dartz/dartz.dart';
 
-class FetchBestNewestBooksUseCase {
+class FetchBestNewestBooksUseCase implements UseCase<List<BookEntity>> {
   final HomeRepo homeRepo;
 
   FetchBestNewestBooksUseCase(this.homeRepo);
 
-  Future<Either<Failure, List<BookEntity>>> getNewestBooksCall() async {
+  @override
+  Future<Either<Failure, List<BookEntity>>> call() async {
     return await homeRepo.getNewestBooks();
   }
 }
