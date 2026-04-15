@@ -15,7 +15,7 @@ void main() async {
   // 3. فتح "صندوق" لتخزين المهام. الصندوق يشبه الجدول في SQL.
   // هنا بنفتح صندوق باسم kFeaturedBox لتخزين الكتب المميزة وصندوق تاني باسم kNewestBox لتخزين الكتب الجديدة
   await Hive.openBox<BookEntity>(kFeaturedBox);
-  // await Hive.openBox<BookEntity>(kNewestBox);
+  await Hive.openBox<BookEntity>(kNewestBox);
 
   runApp(const CleanArchBooklyApp());
 }
