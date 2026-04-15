@@ -5,3 +5,5 @@ const kRatingStarColor = Color(0xffFFDD4F);
 const kAppGreyColor = Color(0xff707070);
 const kGTSectraFine = 'GT Sectra Fine Regular';
 const kTransitonDuration = Duration(microseconds: 250);
+const kFeaturedBox = 'featured_box';
+const kNewestBox = 'newest_box';

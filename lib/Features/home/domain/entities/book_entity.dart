@@ -5,9 +5,9 @@ import 'package:hive/hive.dart';
 
 part 'book_entity.g.dart';
 
-@HiveType(typeId: 0)
+@HiveType(typeId: 0) // ال typeId ده رقم مميز لكل كلاس انت بتعمله عشان ال hive يقدر يفرق بين الكلاسات المختلفة اللي انت بتسجلها في ال hive
 class BookEntity {
-  @HiveField(0)
+  @HiveField(0) // ال HiveField ده بيحدد رقم الحقل في ال hive box عشان يقدر يخزنه ويجيبه بسهولة من ال hive box لما يحتاجه
   final String bookId;
   @HiveField(1)
   final String? imageUrl;
