@@ -4,6 +4,7 @@ import 'package:clean_arch_bookly_app/Features/home/data/data_sources/home_remot
 import 'package:clean_arch_bookly_app/Features/home/domain/entities/book_entity.dart';
 import 'package:clean_arch_bookly_app/Features/home/domain/repositories/home_repo.dart';
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 
 class HomeRepoImpl implements HomeRepo {
   // هنا انا عملت ال HomeRepoImpl اللي هو ال implementation بتاع ال HomeRepo اللي هو ال repository اللي بيتعامل مع ال data sources كلها سواء كانت remote او local وبيتعامل مع الاخطاء اللي ممكن تحصل في اي منهم وبيرجع النتيجة اللي جايه من ال data source سواء كانت بيانات او خطأ للي فوق اللي هو ال use case وبيستخدم ال HomeRemoteDataSource عشان يجلب البيانات من الانترنت و ال HomeLocalDataSource عشان يجلب البيانات من الجهاز في حالة ان الانترنت مش شغال او حصل اي مشكلة في الاتصال بالانترنت فبيقدر يجيب البيانات اللي عنده في الجهاز بدل ما يشوف رسالة خطأ او حاجة زي كده
@@ -28,7 +29,10 @@ class HomeRepoImpl implements HomeRepo {
       books = await homeRemoteDataSource.fetchFeaturedBooks();
       return right(books);
     } catch (e) {
-      return left(Failure(e.toString()));
+      if (e is DioException) {
+        return left(ServerFailure.fromDioError(e));
+      }
+      return left(ServerFailure(e.toString()));
     }
   }
 
@@ -43,7 +47,10 @@ class HomeRepoImpl implements HomeRepo {
       books = await homeRemoteDataSource.fetchNewestBooks();
       return right(books);
     } catch (e) {
-      return left(Failure(e.toString()));
+      if (e is DioException) {
+        return left(ServerFailure.fromDioError(e));
+      }
+      return left(ServerFailure(e.toString()));
     }
   }
 }
