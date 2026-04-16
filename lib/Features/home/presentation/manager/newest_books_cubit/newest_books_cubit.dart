@@ -1,7 +1,7 @@
-import 'package:bloc/bloc.dart';
 import 'package:clean_arch_bookly_app/Features/home/domain/entities/book_entity.dart';
 import 'package:clean_arch_bookly_app/Features/home/domain/usecases/fetch_newest_books_use_case.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'newest_books_state.dart';
 
