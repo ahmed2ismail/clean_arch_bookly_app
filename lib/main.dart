@@ -1,5 +1,6 @@
 import 'package:clean_arch_bookly_app/Core/di/injection_container.dart' as di;
 import 'package:clean_arch_bookly_app/Core/utils/app_router.dart';
+import 'package:clean_arch_bookly_app/Core/utils/simple_bloc_observer.dart';
 import 'package:clean_arch_bookly_app/Features/home/domain/entities/book_entity.dart';
 import 'package:clean_arch_bookly_app/Features/home/presentation/manager/featured_books_cubit/featured_books_cubit.dart';
 import 'package:clean_arch_bookly_app/Features/home/presentation/manager/newest_books_cubit/newest_books_cubit.dart';
@@ -23,6 +24,9 @@ void main() async {
 
   // تهيئة ال Dependency Injection
   await di.init();
+
+  // تسجيل ال BlocObserver الخاص بنا لمراقبة lifecycle events لل Bloc و ال Cubit في الابلكيشن
+  Bloc.observer = SimpleBlocObserver();
 
   runApp(const CleanArchBooklyApp());
 }
