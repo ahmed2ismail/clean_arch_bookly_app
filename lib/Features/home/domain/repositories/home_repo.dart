@@ -3,6 +3,6 @@ import 'package:clean_arch_bookly_app/Features/home/domain/entities/book_entity.
 import 'package:dartz/dartz.dart';
 
 abstract class HomeRepo {
-  Future<Either<Failure, List<BookEntity>>> getFeaturedBooks();
-  Future<Either<Failure, List<BookEntity>>> getNewestBooks();
+  Future<Either<Failure, List<BookEntity>>> getFeaturedBooks({int pageNumber = 0});
+  Future<Either<Failure, List<BookEntity>>> getNewestBooks({int pageNumber = 0});
 }

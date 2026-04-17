@@ -1,5 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clean_arch_bookly_app/Core/utils/app_router.dart';
-import 'package:clean_arch_bookly_app/Core/utils/assets.dart';
 import 'package:clean_arch_bookly_app/Core/utils/styles.dart';
 import 'package:clean_arch_bookly_app/Features/home/presentation/views/widgets/book_rating.dart';
 import 'package:clean_arch_bookly_app/constants.dart';
@@ -7,8 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class BookListViewItem extends StatelessWidget {
-  const BookListViewItem({super.key});
+  const BookListViewItem({super.key, required this.imageUrl});
 
+  final String imageUrl;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -21,14 +22,15 @@ class BookListViewItem extends StatelessWidget {
           children: [
             AspectRatio(
               aspectRatio: 2.5 / 4,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  image: const DecorationImage(
-                    image: AssetImage(AssetsData.testImage),
-                    fit: BoxFit.fill,
-                  ),
-                  borderRadius: BorderRadius.circular(8),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: CachedNetworkImage(
+                  // بستخدمها عشان اعرض كل ال urls اللي بتيجي من علي النت
+                  imageUrl: imageUrl,
+                  fit: BoxFit.fill,
+                  placeholder: (context, url) =>
+                      const Center(child: CircularProgressIndicator()),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
               ),
             ),

@@ -1,10 +1,12 @@
 import 'dart:ui';
+import 'package:clean_arch_bookly_app/Features/home/domain/entities/book_entity.dart';
 import 'package:clean_arch_bookly_app/Features/home/presentation/views/widgets/custom_book_image.dart';
 import 'package:flutter/material.dart';
 
 class FuturedBooksListView extends StatelessWidget {
-  const FuturedBooksListView({super.key});
+  const FuturedBooksListView({super.key, required this.books});
 
+  final List<BookEntity> books;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -20,11 +22,11 @@ class FuturedBooksListView extends StatelessWidget {
         ),
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: 20,
+          itemCount: books.length,
           physics: const BouncingScrollPhysics(),
-          itemBuilder: (context, index) => const Padding(
+          itemBuilder: (context, index) => Padding(
             padding: EdgeInsets.symmetric(horizontal: 8.0),
-            child: CustomBookImage(),
+            child: CustomBookImage(imageUrl: books[index].imageUrl ?? ''),
           ),
         ),
       ),

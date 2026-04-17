@@ -118,7 +118,9 @@ class NetworkFailure extends Failure {
 
   // مصنع خاص يتعامل مع انقطاع الإنترنت المباشر
   factory NetworkFailure.fromSocketException(SocketException exception) {
-    return NetworkFailure('No Internet Connection. Please check your network and try again.');
+    return NetworkFailure(
+      'No Internet Connection. Please check your network and try again.',
+    );
   }
 }
 
@@ -131,7 +133,9 @@ class UnexpectedFailure extends Failure {
 
   // نستخدمه في الـ catch(e) العامة
   factory UnexpectedFailure.fromException(Exception e) {
-    return UnexpectedFailure('An unexpected error occurred. Please try again or contact support.');
+    return UnexpectedFailure(
+      'An unexpected error occurred. Please try again or contact support.',
+    );
   }
 }
 
@@ -144,7 +148,9 @@ class DataValidationFailure extends Failure {
 
   // للتحقق من بيانات المدخلات
   factory DataValidationFailure.invalidInput(String message) {
-    return DataValidationFailure(message.isEmpty ? 'Invalid input data provided.' : message);
+    return DataValidationFailure(
+      message.isEmpty ? 'Invalid input data provided.' : message,
+    );
   }
 }
 
@@ -157,7 +163,9 @@ class AuthenticationFailure extends Failure {
 
   // للتعامل مع انتهاء صلاحية الـ Token
   factory AuthenticationFailure.sessionExpired() {
-    return AuthenticationFailure('Session expired. Please log in again to secure your account.');
+    return AuthenticationFailure(
+      'Session expired. Please log in again to secure your account.',
+    );
   }
 }
 
@@ -170,7 +178,9 @@ class LocalStorageFailure extends Failure {
 
   // مخصص لمشاكل "الكتابة" على الجهاز
   factory LocalStorageFailure.saveError() {
-    return LocalStorageFailure('Failed to save data locally. Please check your device storage.');
+    return LocalStorageFailure(
+      'Failed to save data locally. Please check your device storage.',
+    );
   }
 }
 
@@ -183,7 +193,9 @@ class ParsingFailure extends Failure {
 
   // خطأ تغير هيكل הـ JSON
   factory ParsingFailure.fromFormatException(FormatException exception) {
-    return ParsingFailure('Data formatting error occurred. We are working to resolve this issue.');
+    return ParsingFailure(
+      'Data formatting error occurred. We are working to resolve this issue.',
+    );
   }
 }
 
@@ -196,7 +208,9 @@ class TimeoutFailure extends Failure {
 
   // يستخدم لعمليات Future.timeout
   factory TimeoutFailure.timeEnded() {
-    return TimeoutFailure('The operation timed out. Please check your connection speed.');
+    return TimeoutFailure(
+      'The operation timed out. Please check your connection speed.',
+    );
   }
 }
 
@@ -206,7 +220,7 @@ class TimeoutFailure extends Failure {
 // ---------------------------------------------------------
 class CustomFailure extends Failure {
   CustomFailure(super.errMessage);
-  
+
   // لإرسال أي رسالة خطأ مخصصة بشكل ديناميكي
   factory CustomFailure.withMessage(String customErrMessage) {
     return CustomFailure(customErrMessage);

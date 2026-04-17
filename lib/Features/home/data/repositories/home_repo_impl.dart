@@ -17,7 +17,7 @@ class HomeRepoImpl implements HomeRepo {
   });
 
   @override
-  Future<Either<Failure, List<BookEntity>>> getFeaturedBooks() async {
+  Future<Either<Failure, List<BookEntity>>> getFeaturedBooks({int pageNumber = 0}) async {
     try {
       // بجيب البيانات من ال local data source الاول عشان اشوف اذا كانت موجودة عندي في الجهاز ولا لا فلو كانت موجودة بستخدمها وارجعها للي فوق اللي هو ال use case اما لو ما كانتش موجودة بجيبها من ال remote data source وبعدين ارجعها للي فوق اللي هو ال use case
       // بس انا كده بجيب كل مرة نفس البيانات من ال local data source لانها متغيرتش يعني متحدثتش من ال remote data source
@@ -37,7 +37,7 @@ class HomeRepoImpl implements HomeRepo {
   }
 
   @override
-  Future<Either<Failure, List<BookEntity>>> getNewestBooks() async {
+  Future<Either<Failure, List<BookEntity>>> getNewestBooks({int pageNumber = 0}) async {
     try {
       List<BookEntity> books;
       books = homeLocalDataSource.getLastNewestBooks();
