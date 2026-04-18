@@ -17,19 +17,23 @@ class HomeRepoImpl implements HomeRepo {
   });
 
   @override
-  Future<Either<Failure, List<BookEntity>>> getFeaturedBooks({int pageNumber = 0}) async {
+  Future<Either<Failure, List<BookEntity>>> getFeaturedBooks({
+    int pageNumber = 0,
+  }) async {
+    List<BookEntity> books;
     try {
-      // بجيب البيانات من ال local data source الاول عشان اشوف اذا كانت موجودة عندي في الجهاز ولا لا فلو كانت موجودة بستخدمها وارجعها للي فوق اللي هو ال use case اما لو ما كانتش موجودة بجيبها من ال remote data source وبعدين ارجعها للي فوق اللي هو ال use case
-      // بس انا كده بجيب كل مرة نفس البيانات من ال local data source لانها متغيرتش يعني متحدثتش من ال remote data source
-      List<BookEntity> books;
-      books = homeLocalDataSource.getLastFeaturedBooks();
-      if (books.isNotEmpty) {
-        return right(books);
-      }
-      books = await homeRemoteDataSource.fetchFeaturedBooks();
+      books = await homeRemoteDataSource.fetchFeaturedBooks(
+        pageNumber: pageNumber,
+      );
+      homeLocalDataSource.saveFeaturedBooks(books);
       return right(books);
     } catch (e) {
       if (e is DioException) {
+        // في حالة فشل الاتصال بالانترنت، حاول تجيب البيانات من الكاش لو دي أول صفحة
+        if (pageNumber == 0) {
+          books = homeLocalDataSource.getLastFeaturedBooks();
+          return right(books);
+        }
         return left(ServerFailure.fromDioError(e));
       }
       return left(ServerFailure(e.toString()));
@@ -37,17 +41,23 @@ class HomeRepoImpl implements HomeRepo {
   }
 
   @override
-  Future<Either<Failure, List<BookEntity>>> getNewestBooks({int pageNumber = 0}) async {
+  Future<Either<Failure, List<BookEntity>>> getNewestBooks({
+    int pageNumber = 0,
+  }) async {
+    List<BookEntity> books;
     try {
-      List<BookEntity> books;
-      books = homeLocalDataSource.getLastNewestBooks();
-      if (books.isNotEmpty) {
-        return right(books);
-      }
-      books = await homeRemoteDataSource.fetchNewestBooks();
+      books = await homeRemoteDataSource.fetchNewestBooks(
+        pageNumber: pageNumber,
+      );
+      homeLocalDataSource.saveNewestBooks(books);
       return right(books);
     } catch (e) {
       if (e is DioException) {
+        // في حالة فشل الاتصال بالانترنت، حاول تجيب البيانات من الكاش لو دي أول صفحة
+        if (pageNumber == 0) {
+          books = homeLocalDataSource.getLastNewestBooks();
+          return right(books);
+        }
         return left(ServerFailure.fromDioError(e));
       }
       return left(ServerFailure(e.toString()));

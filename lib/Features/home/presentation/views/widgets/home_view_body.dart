@@ -1,7 +1,7 @@
 import 'package:clean_arch_bookly_app/Core/utils/styles.dart';
 import 'package:clean_arch_bookly_app/Features/home/presentation/views/widgets/custom_appbar.dart';
 import 'package:clean_arch_bookly_app/Features/home/presentation/views/widgets/futured_books_list_view_bloc_builder.dart';
-import 'package:clean_arch_bookly_app/Features/home/presentation/views/widgets/newest_books_list_view.dart';
+import 'package:clean_arch_bookly_app/Features/home/presentation/views/widgets/newest_books_list_view_bloc_builder.dart';
 import 'package:flutter/material.dart';
 
 class HomeViewBody extends StatelessWidget {
