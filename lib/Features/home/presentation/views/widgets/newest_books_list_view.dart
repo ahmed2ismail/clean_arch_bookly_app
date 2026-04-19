@@ -15,18 +15,17 @@ class NewestBooksListView extends StatefulWidget {
 
 class _NewestBooksListViewState extends State<NewestBooksListView> {
   late final ScrollController _scrollController;
-  int nextPageNumber = 1; // بنبدأ من الصفحة الثانية عشان الصفحة الأولى جايانا في البداية مع البيانات الأولية
-  late bool isLoading = false; // متغير بسيط عشان يمنع استدعاءات متكررة للـ Cubit لما المستخدم يوصل لنهاية القائمة
+  int nextPageNumber =
+      1; // بنبدأ من الصفحة الثانية عشان الصفحة الأولى جايانا في البداية مع البيانات الأولية
 
-
-@override
+  @override
   initState() {
     super.initState();
     _scrollController = ScrollController();
     _scrollController.addListener(_onScroll);
   }
 
-@override
+  @override
   dispose() {
     _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
@@ -39,27 +38,37 @@ class _NewestBooksListViewState extends State<NewestBooksListView> {
         0.7 * _scrollController.position.maxScrollExtent) {
       // بنستدعي الـ Cubit عشان يجيب الصفحة التالية من الكتب
       // لوجيك يمنع استدعاءات متكررة
-      if (!isLoading) {
-        isLoading = true; // بنغير الحالة عشان نمنع استدعاءات متكررة
-      BlocProvider.of<NewestBooksCubit>(context).fetchNewestBooks();
-        // nextPageNumber++; // بنزود رقم الصفحة عشان المرة الجاية نجيب اللي بعدها
-        isLoading = false; // بنرجع الحالة عشان نسمح بطلبات جديدة
+      final cubit = BlocProvider.of<NewestBooksCubit>(context);
+      if (cubit.state is! NewestBooksPaginationLoading) {
+        cubit.fetchNewestBooks(pageNumber: nextPageNumber++);
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final cubitState = BlocProvider.of<NewestBooksCubit>(context).state;
+    final isPaginationLoading = cubitState is NewestBooksPaginationLoading;
+
     return ListView.builder(
       controller: _scrollController,
       physics:
           const NeverScrollableScrollPhysics(), // بمعني ميبقاش فيه scroll خالص
       padding: const EdgeInsets.only(top: 10, left: 30, right: 30),
-      itemBuilder: (context, index) => Padding(
-        padding: EdgeInsets.symmetric(vertical: 10.0),
-        child: BookListViewItem(imageUrl: widget.books[index].imageUrl ?? ''),
-      ),
-      itemCount: widget.books.length,
+      itemBuilder: (context, index) {
+        // لو وصلنا لآخر عنصر في القائمة، وحالة الـ pagination هي loading، نعرض مؤشر التحميل
+        if (isPaginationLoading && index == widget.books.length) {
+          return const Padding(
+            padding: EdgeInsets.symmetric(vertical: 16.0),
+            child: Center(child: CircularProgressIndicator()),
+          );
+        }
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10.0),
+          child: BookListViewItem(imageUrl: widget.books[index].imageUrl ?? ''),
+        );
+      },
+      itemCount: widget.books.length + (isPaginationLoading ? 1 : 0),
     );
   }
 }

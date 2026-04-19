@@ -49,6 +49,9 @@ class _FuturedBooksListViewState extends State<FuturedBooksListView> {
 
   @override
   Widget build(BuildContext context) {
+    final cubitState = BlocProvider.of<FeaturedBooksCubit>(context).state;
+    final isPaginationLoading = cubitState is FeaturedBooksPaginationLoading;
+
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.3,
       // ال AspectRatio هتظبط ابعاد الصورة علي اساس ابعاد ال SizedBox والصورة هتبقي Responsible و مظبوطة علي اي جهاز
@@ -63,14 +66,23 @@ class _FuturedBooksListViewState extends State<FuturedBooksListView> {
         child: ListView.builder(
           controller: _scrollController, // بنربط الـ controller بالـ ListView
           scrollDirection: Axis.horizontal,
-          itemCount: widget.books.length,
+          itemCount: widget.books.length + (isPaginationLoading ? 1 : 0),
           physics: const BouncingScrollPhysics(),
-          itemBuilder: (context, index) => Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: CustomBookImage(
-              imageUrl: widget.books[index].imageUrl ?? '',
-            ),
-          ),
+          itemBuilder: (context, index) {
+            // لو وصلنا لآخر عنصر في القائمة، وحالة الـ pagination هي loading، نعرض مؤشر التحميل
+            if (isPaginationLoading && index == widget.books.length - 1) {
+              return const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: Center(child: CircularProgressIndicator()),
+              );
+            }
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: CustomBookImage(
+                imageUrl: widget.books[index].imageUrl ?? '',
+              ),
+            );
+          },
         ),
       ),
     );
