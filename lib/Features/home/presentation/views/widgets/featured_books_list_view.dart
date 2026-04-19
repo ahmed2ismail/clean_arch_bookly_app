@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:clean_arch_bookly_app/Features/home/domain/entities/book_entity.dart';
 import 'package:clean_arch_bookly_app/Features/home/presentation/manager/featured_books_cubit/featured_books_cubit.dart';
+import 'package:clean_arch_bookly_app/Features/home/presentation/manager/featured_books_cubit/featured_books_states.dart';
 import 'package:clean_arch_bookly_app/Features/home/presentation/views/widgets/custom_book_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,8 +17,9 @@ class FuturedBooksListView extends StatefulWidget {
 
 class _FuturedBooksListViewState extends State<FuturedBooksListView> {
   late final ScrollController _scrollController;
-  int nextPageNumber = 1; // بنبدأ من الصفحة الثانية عشان الصفحة الأولى جايانا في البداية مع البيانات الأولية
-  late bool isLoading = false; // متغير بسيط عشان يمنع استدعاءات متكررة للـ Cubit لما المستخدم يوصل لنهاية القائمة
+  int nextPageNumber =
+      1; // بنبدأ من الصفحة الثانية عشان الصفحة الأولى جايانا في البداية مع البيانات الأولية
+  // لم نعد بحاجة لهذا المتغير، سنتحقق من حالة الـ cubit بدلاً من ذلك.
 
   @override
   void initState() {
@@ -37,13 +39,10 @@ class _FuturedBooksListViewState extends State<FuturedBooksListView> {
     // بنفحص لو المستخدم وصل لـ 70% من نهاية القائمة
     if (_scrollController.position.pixels >=
         0.7 * _scrollController.position.maxScrollExtent) {
-      // بنستدعي الـ Cubit عشان يجيب الصفحة التالية من الكتب
-      // لوجيك يمنع استدعاءات متكررة
-      if (!isLoading) { // بنفحص لو مفيش طلب جاي حاليا من قبل المستخدم
-        isLoading = true; // بنغير الحالة عشان نمنع استدعاءات متكررة
-        BlocProvider.of<FeaturedBooksCubit>(context).fetchFeaturedBooks(pageNumber: nextPageNumber++);
-        // nextPageNumber++; // بنزود رقم الصفحة عشان المرة الجاية نجيب اللي بعدها
-        isLoading = false; // بنرجع الحالة عشان نسمح بطلبات جديدة
+      final cubit = BlocProvider.of<FeaturedBooksCubit>(context);
+      // بالتحقق من حالة الـ cubit، نمنع إطلاق طلبات pagination متعددة في نفس الوقت.
+      if (cubit.state is! FeaturedBooksPaginationLoading) {
+        cubit.fetchFeaturedBooks(pageNumber: nextPageNumber++);
       }
     }
   }

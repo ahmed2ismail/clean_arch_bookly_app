@@ -1,5 +1,6 @@
 import 'package:clean_arch_bookly_app/Core/utils/functions/build_error_snack_bar.dart';
 import 'package:clean_arch_bookly_app/Features/home/domain/entities/book_entity.dart';
+import 'package:clean_arch_bookly_app/Features/home/presentation/views/widgets/featured_books_list_view_fading_loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:clean_arch_bookly_app/Features/home/presentation/views/widgets/featured_books_list_view.dart';
@@ -23,7 +24,7 @@ class _FuturedBooksListViewBlocConsumerState
     return BlocConsumer<FeaturedBooksCubit, FeaturedBooksState>(
       listener: (context, state) {
         if (state is FeaturedBooksSuccess) {
-          books = state.books;
+          books.addAll(state.books);
         }
         if (state is FeaturedBooksPaginationFailure) {
           ScaffoldMessenger.of(
@@ -42,7 +43,7 @@ class _FuturedBooksListViewBlocConsumerState
         } else if (state is FeaturedBooksFailure) {
           return Center(child: Text(state.errMessage));
         } else {
-          return const Center(child: CircularProgressIndicator());
+          return const FeaturedBooksListViewFadingLoadingIndicator();
         }
       },
     );
