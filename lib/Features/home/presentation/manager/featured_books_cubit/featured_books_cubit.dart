@@ -5,10 +5,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class FeaturedBooksCubit extends Cubit<FeaturedBooksState> {
   final FetchFeaturedBooksUseCase fetchFeaturedBooksUseCase;
 
-  FeaturedBooksCubit(this.fetchFeaturedBooksUseCase) : super(FeaturedBooksInitial());
+  FeaturedBooksCubit(this.fetchFeaturedBooksUseCase)
+    : super(FeaturedBooksInitial());
 
   Future<void> fetchFeaturedBooks({int pageNumber = 0}) async {
-    emit(FeaturedBooksLoading());
+    if (pageNumber == 0) {
+      emit(FeaturedBooksLoading());
+    } else {
+      emit(FeaturedBooksPaginationLoading());
+    }
     final result = await fetchFeaturedBooksUseCase.call(pageNumber);
     result.fold(
       (failure) => emit(FeaturedBooksFailure(failure.errMessage)),
