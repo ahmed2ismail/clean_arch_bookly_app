@@ -1,7 +1,7 @@
 import 'package:clean_arch_bookly_app/Core/utils/styles.dart';
 import 'package:clean_arch_bookly_app/Features/home/presentation/views/widgets/custom_appbar.dart';
-import 'package:clean_arch_bookly_app/Features/home/presentation/views/widgets/futured_books_list_view_bloc_builder.dart';
-import 'package:clean_arch_bookly_app/Features/home/presentation/views/widgets/newest_books_list_view_bloc_builder.dart';
+import 'package:clean_arch_bookly_app/Features/home/presentation/views/widgets/futured_books_list_view_bloc_consumer.dart';
+import 'package:clean_arch_bookly_app/Features/home/presentation/views/widgets/newest_books_list_view_bloc_consumer.dart';
 import 'package:flutter/material.dart';
 
 class HomeViewBody extends StatelessWidget {
@@ -18,7 +18,7 @@ class HomeViewBody extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomAppBar(),
-              FuturedBooksListViewBlocBuilder(),
+              FuturedBooksListViewBlocConsumer(),
               SizedBox(height: 50),
               Padding(
                 padding: EdgeInsets.only(left: 30.0),
@@ -27,7 +27,7 @@ class HomeViewBody extends StatelessWidget {
             ],
           ),
         ),
-        SliverFillRemaining(child: NewestBooksListViewBlocBuilder()),
+        SliverFillRemaining(child: NewestBooksListViewBlocConsumer()),
         // SliverFillRemaining : بتستخدم عشان تخلي ال ListView اللي جواها تاخد المساحة المتبقية من ال screen وتتعامل معاها كأنها جزء واحد من ال scroll، وبكده حلينا مشكلة ال scrolling جوا ال ListView اللي كانت بتعارض ال CustomScrollView.
       ],
     );

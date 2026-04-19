@@ -18,7 +18,9 @@ class NewestBooksCubit extends Cubit<NewestBooksState> {
     }
     final result = await fetchBestNewestBooksUseCase.call(pageNumber);
     result.fold(
-      (failure) => emit(NewestBooksFailure(failure.errMessage)),
+      (failure) => pageNumber == 0
+          ? emit(NewestBooksFailure(failure.errMessage))
+          : emit(NewestBooksPaginationFailure(failure.errMessage)),
       (books) => emit(NewestBooksSuccess(books)),
     );
   }
